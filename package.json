@@ -1,0 +1,25 @@
+{
+  "name": "sequelize_module",
+  "version": "1.0.0",
+  "description": "Using Sequelize as ORM to connect Node.js with PostgreSQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MkdmOmar/sequelize_module.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MkdmOmar/sequelize_module/issues"
+  },
+  "homepage": "https://github.com/MkdmOmar/sequelize_module#readme",
+  "dependencies": {
+    "pg": "^6.1.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.24.3"
+  }
+}
