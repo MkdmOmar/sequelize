@@ -23,10 +23,46 @@ var Entity = connection.define('conference_transcription_db', {
 });
 
 connection.sync().then(function() {
-    Entity.create({
-        conference_time: new Date(),
-        meeting_subject: 'earnings call'
-    })
+
+var currentTime = new Date();
+/*
+var tenSecPlus = new Date();
+var fortySecPlus = new Date();
+var twoMinPlus = new Date();
+ tenSecPlus = currentTime.setSeconds(currentTime.getSeconds + 10);
+ fortySecPlus = currentTime.setSeconds(currentTime.getSeconds + 40);
+ twoMinPlus = currentTime.setMinutes(currentTime.getMinutes + 2);
+*/
+
+  //Insert multiple items at once
+    Entity.bulkCreate(
+      [
+
+      //current time
+      {
+        conference_time: currentTime,
+        meeting_subject: 'Conference call now'
+      },
+
+        //10 seconds later
+        {
+        conference_time: new Date(currentTime.getTime() + 10*1000),
+        meeting_subject: 'Conference call +10sec'
+      },
+
+        //40 seconds later
+        {
+        conference_time: new Date(currentTime.getTime() + 40*1000),
+        meeting_subject: 'Conference call +20sec'
+      },
+
+        //2 minutes later
+        {
+        conference_time: new Date(currentTime.getTime() + 2*60*1000),
+        meeting_subject: 'Conference call +2min'
+      }
+      ]
+    )
 }).catch(function(error) {
     console.log(error);
 });
