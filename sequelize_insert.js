@@ -1,14 +1,17 @@
-//Exporting this function for external usage.
-exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ratingVoicebase, email) {
+var Sequelize = require('sequelize');
 
-    var Sequelize = require('sequelize');
+var connection;
 
-    var connection = new Sequelize(dbName, username, password, {
+var Entity;
+
+
+function setup(dbName, username, password) {
+    connection = new Sequelize(dbName, username, password, {
         dialect: 'postgres'
     });
 
     //Define the entity model
-    var Entity = connection.define('conference_transcription_db', {
+    Entity = connection.define('conference_transcription_db', {
         UUID: {
             type: Sequelize.UUID,
             allowNull: false
@@ -27,7 +30,12 @@ exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ra
         }
     });
 
+}
 
+//Exporting this function for external usage.
+exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ratingVoicebase, email) {
+
+    setup(dbName, username, password);
 
     connection.sync().then(function() {
 
@@ -47,5 +55,46 @@ exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ra
     }).catch(function(error) {
         console.log(error);
     });
+
+}
+
+exports.getStats = function(dbName, username, password) {
+
+    var result = {};
+
+    var numRatings;
+
+    var sumWatson = 0;
+    var sumVoicebase = 0;
+
+    var meanWatson = 0;
+    var meanVoicebase = 0;
+
+    setup(dbName, username, password);
+
+    //Select all items that occur within the next minute
+    Entity.findAll().then(function(entities) {
+        numRatings = entities.length;
+
+        entities.forEach(calcStats);
+
+        meanWatson = sumWatson / numRatings;
+        meanVoicebase = sumVoicebase / numRatings;
+
+        result.numWatsonRatings = numRatings;
+        result.numVoicebaseRatings = numRatings;
+        result.meanWatsonRatings = meanWatson;
+        result.meanVoicebaseRatings = meanVoicebase;
+        console.log(result);
+        return result;
+    })
+
+
+    // Display properties of the entities objects
+    var calcStats = function(currEntity) {
+        sumWatson += currEntity.watson_rating;
+        sumVoicebase += currEntity.voicebase_rating;
+
+    }
 
 }
