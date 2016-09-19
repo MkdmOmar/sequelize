@@ -7,7 +7,7 @@ exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ra
         dialect: 'postgres'
     });
 
-
+    //Define the entity model
     var Entity = connection.define('conference_transcription_db', {
         UUID: {
             type: Sequelize.UUID,
@@ -31,19 +31,18 @@ exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ra
 
     connection.sync().then(function() {
 
-      var data =
-      {
-        UUID: uuid,
-        voicebase_rating: ratingVoicebase,
-        watson_rating: ratingWatson,
-        user_email: email
-      };
+        //Constructing the data object
+        var data = {
+            UUID: uuid,
+            voicebase_rating: ratingVoicebase,
+            watson_rating: ratingWatson,
+            user_email: email
+        };
 
-      Entity.create(data).then(function(post){
-        console.dir(post.get());
-      })
-
-
+        //Insert the data and verify
+        Entity.create(data).then(function(post) {
+            console.dir(post.get());
+        })
 
     }).catch(function(error) {
         console.log(error);
