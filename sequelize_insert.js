@@ -1,7 +1,6 @@
 var Sequelize = require('sequelize');
 
 var connection;
-
 var Entity;
 
 
@@ -57,7 +56,7 @@ exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ra
     });
 
 }
-
+  //Get number of Watson and Voicebase ratings in addition to their means
 exports.getStats = function(dbName, username, password) {
 
     var result = {};
@@ -72,29 +71,30 @@ exports.getStats = function(dbName, username, password) {
 
     setup(dbName, username, password);
 
-    //Select all items that occur within the next minute
+    //Select all items
     Entity.findAll().then(function(entities) {
         numRatings = entities.length;
 
-        entities.forEach(calcStats);
+        entities.forEach(function(currEntity) {
+            sumWatson += currEntity.watson_rating;
+            sumVoicebase += currEntity.voicebase_rating;
 
+        });
+
+        //Calculating means
         meanWatson = sumWatson / numRatings;
         meanVoicebase = sumVoicebase / numRatings;
 
+        //Constructing result object
         result.numWatsonRatings = numRatings;
         result.numVoicebaseRatings = numRatings;
         result.meanWatsonRatings = meanWatson;
         result.meanVoicebaseRatings = meanVoicebase;
+
         console.log(result);
-        return result;
+
     })
 
-
-    // Display properties of the entities objects
-    var calcStats = function(currEntity) {
-        sumWatson += currEntity.watson_rating;
-        sumVoicebase += currEntity.voicebase_rating;
-
-    }
+    return result;
 
 }
