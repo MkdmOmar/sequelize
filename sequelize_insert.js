@@ -34,29 +34,29 @@ function setup(dbName, username, password) {
 //Exporting this function for external usage.
 exports.insertInfo = function(dbName, username, password, uuid, ratingWatson, ratingVoicebase, email) {
 
-    setup(dbName, username, password);
+        setup(dbName, username, password);
 
-    connection.sync().then(function() {
+        connection.sync().then(function() {
 
-        //Constructing the data object
-        var data = {
-            UUID: uuid,
-            voicebase_rating: ratingVoicebase,
-            watson_rating: ratingWatson,
-            user_email: email
-        };
+            //Constructing the data object
+            var data = {
+                UUID: uuid,
+                voicebase_rating: ratingVoicebase,
+                watson_rating: ratingWatson,
+                user_email: email
+            };
 
-        //Insert the data and verify
-        Entity.create(data).then(function(post) {
-            console.dir(post.get());
-        })
+            //Insert the data and verify
+            Entity.create(data).then(function(post) {
+                console.dir(post.get());
+            })
 
-    }).catch(function(error) {
-        console.log(error);
-    });
+        }).catch(function(error) {
+            console.log(error);
+        });
 
-}
-  //Get number of Watson and Voicebase ratings in addition to their means
+    }
+    //Get number of Watson/Voicebase ratings and their means
 exports.getStats = function(dbName, username, password) {
 
     var result = {};
